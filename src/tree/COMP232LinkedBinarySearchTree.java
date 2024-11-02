@@ -61,11 +61,19 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
     }
 
 	public boolean contains(K key) {
-		throw new UnsupportedOperationException("implement me in class");
+		return containsHelper(root, key);
 	}
 
-	private boolean containsHelper(BTNode<K, V> subTreeRoo, K key) {
-		throw new UnsupportedOperationException("implement me in class");
+	private boolean containsHelper(BTNode<K, V> subTreeRoot, K key) {
+		if (subTreeRoot == null) {
+			return false;
+		} else if (subTreeRoot.key.equals(key)) {
+			return true;
+		} else if (key.compareTo(subTreeRoot.key) < 0) {
+			return containsHelper(subTreeRoot.left, key);
+		} else {
+			return containsHelper(subTreeRoot.right, key);
+		}
 	}
 
 	public V get(K key) {
@@ -77,11 +85,34 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 	}
 
 	public void add(K key, V value) {
-		throw new UnsupportedOperationException("implement me in class");
+		BTNode<K, V> nodeToAdd = new BTNode<K, V>(key, value);
+
+		if (size == 0) {
+			root = nodeToAdd;
+		} else {
+			addNodeToSubTree(root, nodeToAdd);
+		}
+		size++;
 	}
 
 	protected void addNodeToSubTree(BTNode<K, V> subTreeRoot, BTNode<K, V> nodeToAdd) {
-		throw new UnsupportedOperationException("implement me in class");
+		if (subTreeRoot == null) {
+			root = nodeToAdd;
+		} else if (nodeToAdd.key.compareTo(subTreeRoot.key) < 0) {
+			if (subTreeRoot.left == null) {
+				subTreeRoot.left = nodeToAdd;
+				nodeToAdd.parent = subTreeRoot;
+			} else {
+				addNodeToSubTree(subTreeRoot.left, nodeToAdd);
+			}
+		} else {
+			if (subTreeRoot.right == null) {
+				subTreeRoot.right = nodeToAdd;
+				nodeToAdd.parent = subTreeRoot;
+			} else {
+				addNodeToSubTree(subTreeRoot.right, nodeToAdd);
+			}
+		}
 	}
 
 	public V remove(K key) {
